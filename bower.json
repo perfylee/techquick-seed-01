@@ -1,0 +1,12 @@
+{
+  "name": "techquick-seed-01",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-resource": "^1.5.8",
+    "angular-sanitize": "^1.5.8",
+    "angular-cookies": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "semantic": "^2.2.4"
+  }
+}

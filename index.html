@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="tk" ng-controller="indexCtrl">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="public/libs/semantic/dist/semantic.css">
+    <link rel="stylesheet" href="public/styles/overwrite.css">
+    <link rel="stylesheet" href="public/styles/basic.css">
+
+    <script src="public/libs/jquery/dist/jquery.js"></script>
+    <script src="public/libs/semantic/dist/semantic.js"></script>
+
+    <script src="public/libs/angular/angular.js"></script>
+    <script src="public/libs/angular-cookies/angular-cookies.js"></script>
+    <script src="public/libs/angular-resource/angular-resource.js"></script>
+    <script src="public/libs/angular-ui-router/release/angular-ui-router.js"></script>
+
+    <script src="app.js"></script>
+
+</head>
+<body>
+
+    <div class="ui top fixed large menu index-header">
+        <div class="item borderless logo">
+            <img src="public/images/logo.png">
+        </div>
+
+        <div class="right menu">
+            <div class="item ui category search ">
+                <div class="ui transparent icon input">
+                    <input class="prompt" type="text" placeholder="Search animals...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+
+            <a class="item">待办事项</a>
+            <a class="ui dropdown item">
+                <i class="icon user"></i>欢迎，perfylee
+                <div class="menu">
+                    <div class="item">
+                        <i class="icon edit"></i> 编辑信息
+                    </div>
+                </div>
+            </a>
+            <a class="item icon">
+                <i class="icon power off"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="index-sider">
+        <div class="menu">
+            <div class="item  {{menu.id == currentMenu.id?'active':''}}" ng-repeat="menu in menus">
+                <div class="name" style="cursor:{{ menu.state ?'pointer':'default'}}" ng-click="selectMenu(menu)">
+                    <i class="icon {{menu.icon}}"></i>
+                    {{menu.name}}
+                </div>
+                <div class="menu" ng-if="menu.children && menu.children.length > 0">
+                    <div class="item {{child.id == currentOpen.id?'open':''}} {{child.id == currentMenu.id?'active':''}}" ng-repeat="child in menu.children">
+                        <div class="name" ng-click="selectMenu(child)" style="cursor: pointer;">
+                            {{child.name}}
+                            <i class="icon angle {{child.id == currentOpen.id?'down':'right'}}" ng-if="child.children && child.children.length > 0"></i>
+                        </div>
+                        <div class="menu" ng-if="child.children && child.children.length > 0">
+                            <div class="item {{grandChild.id == currentMenu.id?'active':''}}" ng-repeat="grandChild in child.children" style="cursor: pointer">
+                                <div class="name"  ng-click="selectMenu(grandChild)">
+                                    {{grandChild.name}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="powered by">
+            Powered by TechQuick.Hefei
+        </div>
+    </div>
+
+    <div class="index-content" ui-view>
+    </div>
+
+</body>
+</html>

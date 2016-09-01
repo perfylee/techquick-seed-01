@@ -1,0 +1,124 @@
+*{
+    font-family: '微软雅黑';
+}
+
+body{
+    background: #f0f0f0;
+}
+
+.index-header {
+}
+
+.index-header.ui.menu .item.logo{
+    padding: 0 10px;
+}
+.index-header.ui.menu .item.logo > img{
+    width: auto;
+}
+
+.index-sider {
+    position: fixed;
+    top:43px;
+    bottom: 0;
+    left: 0;
+    padding: 0 0 40px 0;
+    width: 215px;
+    z-index: 102;
+    background: #333;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.index-sider > .powered.by {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    padding-left: 12px;
+    width: 215px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 12px;
+    background: #333;
+
+    text-shadow: 1px 1px 1px #505050;
+}
+
+.index-sider > .menu {
+    padding: 12px 0;
+}
+
+.index-sider > .menu > .item {
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #222;
+    padding: 6px 0;
+}
+
+.index-sider > .menu > .item:last-child {
+    border-bottom-width: 0;
+}
+
+.index-sider > .menu > .item:first-child {
+    border-top-width: 0;
+}
+
+.index-sider > .menu > .item > .name {
+    padding: 4px 10px;
+    font-size:14px;
+}
+
+.index-sider > .menu > .item > .menu {
+}
+
+.index-sider > .menu > .item > .menu > .item > .name{
+    padding: 4px 10px 6px 34px;
+    font-size: 13px;
+}
+
+.index-sider > .menu > .item > .menu > .item.active > .name{
+    background:  #0d71bb;
+    color: #fff;
+}
+
+.index-sider > .menu > .item > .menu > .item > .name > .icon{
+    float: right;
+}
+
+
+.index-sider > .menu > .item > .menu > .item > .menu {
+    display:none;
+    background: #222;
+    padding: 6px 0;
+    box-shadow: inset 0 1px 4px  rgba(0,0,0,.8);
+}
+
+.index-sider > .menu > .item > .menu > .item.open > .menu {
+    display: block;
+}
+
+.index-sider > .menu > .item > .menu > .item > .menu > .item .name{
+    padding: 4px 10px 6px 34px;
+    font-size: 12px;
+}
+
+.index-sider  .menu .item  > .name {
+    position: relative;
+    color: #999;
+    transition: color 0.3s;
+}
+
+.index-sider  .menu .item  > .name:hover{
+    color: #f0f0f0;
+    transition: color 0.3s;
+}
+
+.index-sider  .menu .item.active > .name {
+    background: #0d71bb;
+    color: #fff;
+}
+
+
+
+.index-content {
+    padding: 52px 12px 0 222px;
+}

@@ -1,0 +1,6 @@
+#IDE
+.idea/
+#nodejs
+node_modules/
+#libs
+public/libs
