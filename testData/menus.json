@@ -1,0 +1,248 @@
+{
+  "success": true,
+  "message": null,
+  "results": [
+    {
+      "id": "10000",
+      "code":"home",
+      "name": "全网概览",
+      "parentId": null,
+      "state": "home",
+      "icon": "home"
+    },
+    {
+      "id": "20000",
+      "code": "dev",
+      "name": "终端管理",
+      "parentId": null,
+      "state": null,
+      "icon": "home"
+    },
+    {
+      "id": "20100",
+      "code": "dev.gateway",
+      "name": "网关终端",
+      "parentId": "20000",
+      "state": null,
+      "icon": "home"
+    },
+    {
+      "id": "20101",
+      "code": "dev.gateway.index",
+      "name": "终端设备管理",
+      "parentId": "20100",
+      "state": "dev.gateway.index",
+      "icon": "home"
+    },
+    {
+      "id": "20102",
+      "code": "dev.gateway.update",
+      "name": "终端设备升级管理",
+      "parentId": "20100",
+      "state": "dev.gateway.update",
+      "icon": "home"
+    },
+    {
+      "id": "20103",
+      "code": "dev.gateway.maintain",
+      "name": "终端设备维护管理",
+      "parentId": "20100",
+      "state": "dev.gateway.maintain",
+      "icon": "home"
+    },
+    {
+      "id": "20200",
+      "code": "dev.stb",
+      "name": "机顶盒终端",
+      "parentId": "20000",
+      "state": null,
+      "icon": "home"
+    },
+    {
+      "id": "20201",
+      "code": "dev.stb.index",
+      "name": "机顶盒设备管理",
+      "parentId": "20200",
+      "state": "dev.stb.index",
+      "icon": "home"
+    },
+    {
+      "id": "20202",
+      "code": "dev.stb.update",
+      "name": "机顶盒升级管理",
+      "parentId": "20200",
+      "state": "dev.stb.update",
+      "icon": "home"
+    },
+    {
+      "id": "20203",
+      "code": "dev.stb.config",
+      "name": "机顶盒配置管理",
+      "parentId": "20200",
+      "state": "dev.stb.config",
+      "icon": "home"
+    },
+    {
+      "id": "30000",
+      "code": "plugin",
+      "name": "智能网关插件管理",
+      "parentId": null,
+      "state": null,
+      "icon": "home"
+    },
+    {
+      "id": "30100",
+      "code": "plugin.index",
+      "name": "插件管理",
+      "parentId": "30000",
+      "state": "plugin.index",
+      "icon": "home"
+    },
+    {
+      "id": "30200",
+      "code": "plugin.approval",
+      "name": "插件管理",
+      "parentId": "30000",
+      "state": "plugin.approval",
+      "icon": "home"
+    },
+    {
+      "id": "40000",
+      "code": "biz",
+      "name": "业务运营管理",
+      "parentId": null,
+      "state": "biz",
+      "icon": "home"
+    },
+    {
+      "id": "40100",
+      "code": "biz.report",
+      "name": "本地统计分析",
+      "parentId": "40000",
+      "state": "biz.report",
+      "icon": "home"
+    },
+    {
+      "id": "40200",
+      "code": "biz.manage",
+      "name": "本地业务管理",
+      "parentId": "40000",
+      "state": "biz.manage",
+      "icon": "home"
+    },
+    {
+      "id": "40300",
+      "code": "biz.product",
+      "name": "本地产品管理",
+      "parentId": "40000",
+      "state": "biz.product",
+      "icon": "home"
+    },
+    {
+      "id": "40400",
+      "code": "biz.monitor",
+      "name": "屏幕管理",
+      "parentId": "40000",
+      "state": "biz.monitor",
+      "icon": "home"
+    },
+    {
+      "id": "40500",
+      "code": "biz.stb",
+      "name": "机顶盒业务管理",
+      "parentId": "40000",
+      "state": "biz.stb",
+      "icon": "home"
+    },
+    {
+      "id": "40600",
+      "code": "biz.app",
+      "name": "应用管理",
+      "parentId": "40000",
+      "state": "biz.app",
+      "icon": "home"
+    },
+    {
+      "id": "40700",
+      "code": "biz.web",
+      "name": "机顶盒业务管理",
+      "parentId": "40000",
+      "state": "biz.web",
+      "icon": "home"
+    },
+    {
+      "id": "40800",
+      "code": "biz.friendship",
+      "name": "合作伙伴管理",
+      "parentId": "40000",
+      "state": "biz.friendship",
+      "icon": "home"
+    },
+    {
+      "id": "50000",
+      "code": "system",
+      "name": "系统管理",
+      "parentId": null,
+      "state": null,
+      "icon": "home"
+    },
+    {
+      "id": "50100",
+      "code": "system.user",
+      "name": "用户管理",
+      "parentId": "50000",
+      "state":  "system.user",
+      "icon": "home"
+    },
+    {
+      "id": "50200",
+      "code": "system.role",
+      "name": "角色管理",
+      "parentId": "50000",
+      "state":  "system.role",
+      "icon": "home"
+    },
+    {
+      "id": "50300",
+      "code": "system.dept",
+      "name": "部门管理",
+      "parentId": "50000",
+      "state":  "system.dept",
+      "icon": "home"
+    },
+    {
+      "id": "50400",
+      "code": "system.menu",
+      "name": "菜单管理",
+      "parentId": "50000",
+      "state":  "system.menu",
+      "icon": "home"
+    },
+    {
+      "id": "50500",
+      "code": "system.right",
+      "name": "权限管理管理",
+      "parentId": "50000",
+      "state":  "system.right",
+      "icon": "home"
+    },
+    {
+      "id": "50600",
+      "code": "system.log",
+      "name": "日志管理",
+      "parentId": "50000",
+      "state":  "system.log",
+      "icon": "home"
+    },
+    {
+      "id": "50700",
+      "code": "system.security",
+      "name": "安全策略",
+      "parentId": "50000",
+      "state":  "system.security",
+      "icon": "home"
+    }
+
+
+  ]
+}

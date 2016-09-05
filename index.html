@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" ng-app="tk" ng-controller="indexCtrl">
+<html lang="zh-CN" ng-app="tk" ng-controller="mainCtrl">
 <head>
     <title>Title</title>
     <meta charset="UTF-8">
@@ -17,12 +17,17 @@
     <script src="public/libs/angular-resource/angular-resource.js"></script>
     <script src="public/libs/angular-ui-router/release/angular-ui-router.js"></script>
 
+
+    <script src="modules/system/controller/user.js"></script>
+    <script src="modules/system/controller/role.js"></script>
+
+    <script src="app.global.js"></script>
     <script src="app.js"></script>
 
 </head>
 <body>
 
-    <div class="ui top fixed large menu index-header">
+    <div class="index-header ui top fixed large menu">
         <div class="item borderless logo">
             <img src="public/images/logo.png">
         </div>
@@ -52,22 +57,36 @@
 
     <div class="index-sider">
         <div class="menu">
-            <div class="item  {{menu.id == currentMenu.id?'active':''}}" ng-repeat="menu in menus">
-                <div class="name" style="cursor:{{ menu.state ?'pointer':'default'}}" ng-click="selectMenu(menu)">
+            <div class="item" ng-repeat="menu in menus">
+                <span class="name" ng-if="menu.state == null">
+                     <i class="icon {{menu.icon}}"></i>
+                    {{menu.name}}
+                </span>
+                <a class="name"  ui-sref="{{menu.state}}" ui-sref-active="active"  ng-if="menu.state">
                     <i class="icon {{menu.icon}}"></i>
                     {{menu.name}}
-                </div>
+                </a>
+
                 <div class="menu" ng-if="menu.children && menu.children.length > 0">
-                    <div class="item {{child.id == currentOpen.id?'open':''}} {{child.id == currentMenu.id?'active':''}}" ng-repeat="child in menu.children">
-                        <div class="name" ng-click="selectMenu(child)" style="cursor: pointer;">
+                    <div class="item {{child.id == currentOpen.id ?'open':''}}" ng-repeat="child in menu.children">
+                        <span class="name" ng-if="child.state == null && child.children.length == 0" ng-click="openSubMenu(child)">
+                             {{child.name}}
+                            <i class="icon angle {{child.id == currentOpen.id?'down':'right'}}" ng-if="child.children.length > 0"></i>
+                        </span>
+                        <a class="name" ng-if="child.state == null && child.children.length > 0" ng-click="openSubMenu(child)">
                             {{child.name}}
-                            <i class="icon angle {{child.id == currentOpen.id?'down':'right'}}" ng-if="child.children && child.children.length > 0"></i>
-                        </div>
-                        <div class="menu" ng-if="child.children && child.children.length > 0">
-                            <div class="item {{grandChild.id == currentMenu.id?'active':''}}" ng-repeat="grandChild in child.children" style="cursor: pointer">
-                                <div class="name"  ng-click="selectMenu(grandChild)">
+                            <i class="icon angle {{child.id == currentOpen.id?'down':'right'}}" ng-if="child.children.length > 0"></i>
+                        </a>
+                        <a class="name" ui-sref="{{child.state}}" ui-sref-active="active" ng-if="child.state != null" ng-click="openSubMenu(child)">
+                             {{child.name}}
+                            <i class="icon angle {{child.id == currentOpen.id?'down':'right'}}" ng-if="child.children.length > 0"></i>
+                        </a>
+
+                        <div class="menu" ng-if="child.children.length > 0">
+                            <div class="item " ng-repeat="grandChild in child.children">
+                                <a class="name"  ui-sref="{{grandChild.state}}" ui-sref-active="active">
                                     {{grandChild.name}}
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>

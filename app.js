@@ -2,148 +2,110 @@
 
 angular.module('tk',[
     'ui.router',
+    'tk.global',
+    'tk.system.user',
+    'tk.system.role'
 ])
 
-.config(['$stateProvider',function ($stateProvider) {
-    $stateProvider.state('index', {
-        url: '/index',
-        template: '<div>123</div>',
-        controller: function () {}
-    }).state('system', {
-        url: '/system',
-        template: '<div>456</div>',
-        controller: function () {}
-    })
+.config(['$stateProvider','$urlRouterProvider',function ($stateProvider,$urlRouterProvider) {
+
+
+    $urlRouterProvider.otherwise('/home')
+
+    $stateProvider
+        .state('home', {
+            url: '/home',
+            template: '<div>index</div>',
+            controller: function () {
+            }
+        })
+        .state('system', {
+            abstract: true,
+            template: '<div ui-view></div>'
+        })
+        .state('system.user', {
+            url: '/system/user',
+            templateUrl: 'modules/system/view/user.html',
+            controller: 'systemUserCtrl'
+        })
+        .state('system.role', {
+            url: '/system/role',
+            templateUrl: 'modules/system/view/role.html',
+            controller: 'systemRoleCtrl'
+        })
+        .state('404', {
+            url: '/404',
+            template: '访问的页面不存在'
+        })
+        .state('403', {
+            url: '/403',
+            template: '没有权限'
+        })
+
+
 }])
 
-.controller('indexCtrl',['$scope',function ($scope) {
+.controller('mainCtrl',['$scope','$rootScope','$state','tkGlobal',function ($scope,$rootScope,$state,tkGlobal) {
 
-    $scope.menus = [
-        {
-            id:'000',
-            name: '全网概览',
-            state: 'index',
-            icon: 'home'
-        },
-        {
-            id:'300',
-            name: '资源管理',
-            state: null,
-            icon: 'power off',
-            children: [
-                {
-                    id:'310',
-                    name: '设备管理',
-                    state: 'resource.dev',
-                    icon: 'hdd'
-                },
-                {
-                    id:'320',
-                    name: '用户管理',
-                    state: 'resource.user',
-                    icon: 'hdd'
-                }
-            ]
-        },
-        {
-            id:'100',
-            name: '统计分析',
-            state: null,
-            icon: 'power off',
-            children: [
-                {
-                    id:'110',
-                    name: '资源统计',
-                    icon: 'hdd',
-                    children: [
-                        {
-                            id:'111',
-                            name: '设备资源',
-                            state: 'resource.dev',
-                            icon: 'hdd'
-                        },
-                        {
-                            id:'112',
-                            name: '用户资源',
-                            state: 'resource.dev',
-                            icon: 'hdd'
-                        }
-                    ]
-                },
-                {
-                    id:'120',
-                    name: '用户统计',
-                    icon: 'hdd',
-                    children: [
-                        {
-                            id:'111',
-                            name: '设备资源',
-                            state: 'resource.dev',
-                            icon: 'hdd'
-                        },
-                        {
-                            id:'112',
-                            name: '用户资源',
-                            state: 'resource.dev',
-                            icon: 'hdd'
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            id:'200',
-            name: '系统管理',
-            state: null,
-            icon: 'setting',
-            children: [
-                {
-                    id:'210',
-                    name: '用户管理',
-                    state: 'system.state',
-                    icon: 'user'
-                },
-                {
-                    id:'220',
-                    name: '部门管理',
-                    state: 'system.dept',
-                    icon: 'user'
-                },
-                {
-                    id:'230',
-                    name: '角色管理',
-                    state: 'system.role',
-                    icon: 'user'
-                },
-                {
-                    id:'240',
-                    name: '菜单管理',
-                    state: 'system.menu',
-                    icon: 'user'
-                },
-                {
-                    id:'250',
-                    name: '权限管理',
-                    state: 'system.right',
-                    icon: 'user'
-                }
-            ]
+    $scope.$on('$stateNotFound',
+        function (event, unfoundState, fromState, fromParams) {
+            event.preventDefault()
+            //console.log(unfoundState)
+            $state.go('404')
         }
-    ]
+    )
 
-    $scope.currentMenu = null
+    $scope.$on('$stateChangeStart',
+        function (event, toState, toParams, fromState, fromParams) {
+            //console.log(fromState)
+            //console.log(fromParams)
+            // if(toState.name == 'system.user') {
+            //     event.preventDefault()
+            //     $state.go('403', {test: 1})
+            // }
+
+        }
+    )
+
+
+    $scope.menus = []
     $scope.currentOpen = null
 
-    $scope.selectMenu = function (menu) {
-        if (angular.isArray(menu.children) && menu.children.length > 0) {
+    $scope.openSubMenu = function (menu) {
+        if (angular.isArray(menu.children) && menu.children.length > 0 && menu.parentId != null) {
             if ($scope.currentOpen && $scope.currentOpen.id == menu.id)
                 $scope.currentOpen = null
             else
                 $scope.currentOpen = menu
         }
 
-        if (menu.state)
-            $scope.currentMenu = menu
     }
+
+    tkGlobal.resource.read(
+        tkGlobal.api.menu_query,
+        null,
+        function (res) {
+            $scope.menus = []
+            angular.forEach(res.results, function (menu0) {
+                if (menu0.parentId == null) {
+                    menu0.children = []
+                    angular.forEach(res.results, function (menu1) {
+                        if (menu0.id == menu1.parentId) {
+                            menu1.children = []
+                            angular.forEach(res.results, function (menu2) {
+                                if (menu1.id == menu2.parentId)
+                                    menu1.children.push(menu2)
+                            })
+                            menu0.children.push(menu1)
+                        }
+                    })
+                    $scope.menus.push(menu0)
+                }
+            })
+        },
+        function () {
+
+        }
+    )
 
 }])

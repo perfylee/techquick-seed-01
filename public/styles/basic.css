@@ -44,14 +44,35 @@ body{
     text-shadow: 1px 1px 1px #505050;
 }
 
+
 .index-sider > .menu {
     padding: 12px 0;
 }
 
+.index-sider > .menu  .item > .name {
+    display: block;
+    padding: 3px 10px;
+    font-size:14px;
+    color: #999;
+}
+
+.index-sider > .menu  .item > a.name {
+    cursor: pointer;
+}
+
+.index-sider > .menu  .item > a.name:hover {
+    color: #ccc;
+}
+
+.index-sider > .menu  .item > a.name.active {
+    background: #0d71bb;
+    color: #fff;
+}
+
 .index-sider > .menu > .item {
+    padding: 5px 0;
     border-top: 1px solid #444;
     border-bottom: 1px solid #222;
-    padding: 6px 0;
 }
 
 .index-sider > .menu > .item:last-child {
@@ -62,28 +83,21 @@ body{
     border-top-width: 0;
 }
 
-.index-sider > .menu > .item > .name {
-    padding: 4px 10px;
-    font-size:14px;
-}
 
-.index-sider > .menu > .item > .menu {
-}
-
-.index-sider > .menu > .item > .menu > .item > .name{
-    padding: 4px 10px 6px 34px;
+.index-sider > .menu > .item > .menu > .item > .name {
+    padding-left: 34px;
     font-size: 13px;
 }
 
-.index-sider > .menu > .item > .menu > .item.active > .name{
-    background:  #0d71bb;
-    color: #fff;
+.index-sider > .menu > .item > .menu > .item > .menu > .item .name {
+    padding-left: 34px;
+    font-size: 12px;
 }
+
 
 .index-sider > .menu > .item > .menu > .item > .name > .icon{
     float: right;
 }
-
 
 .index-sider > .menu > .item > .menu > .item > .menu {
     display:none;
@@ -96,26 +110,6 @@ body{
     display: block;
 }
 
-.index-sider > .menu > .item > .menu > .item > .menu > .item .name{
-    padding: 4px 10px 6px 34px;
-    font-size: 12px;
-}
-
-.index-sider  .menu .item  > .name {
-    position: relative;
-    color: #999;
-    transition: color 0.3s;
-}
-
-.index-sider  .menu .item  > .name:hover{
-    color: #f0f0f0;
-    transition: color 0.3s;
-}
-
-.index-sider  .menu .item.active > .name {
-    background: #0d71bb;
-    color: #fff;
-}
 
 
 
