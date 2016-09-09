@@ -7,6 +7,7 @@
     "angular-sanitize": "^1.5.8",
     "angular-cookies": "^1.5.8",
     "angular-ui-router": "^0.3.1",
-    "semantic": "^2.2.4"
+    "semantic": "^2.2.4",
+    "crypto-js": "^3.1.6"
   }
 }

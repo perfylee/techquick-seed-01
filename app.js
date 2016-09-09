@@ -81,18 +81,22 @@ angular.module('tk',[
 
     }
 
+    //"15f9a987-73db-11e6-b1cd-74867a69dbf7"
     tkGlobal.resource.read(
-        tkGlobal.api.menu_query,
-        null,
+        tkGlobal.api.menu_query+'/:id',
+        {
+            id: '15f9a987-73db-11e6-b1cd-74867a69dbf7'
+        },
         function (res) {
+            console.log(res)
             $scope.menus = []
-            angular.forEach(res.results, function (menu0) {
+            angular.forEach(res.data, function (menu0) {
                 if (menu0.parentId == null) {
                     menu0.children = []
-                    angular.forEach(res.results, function (menu1) {
+                    angular.forEach(res.data, function (menu1) {
                         if (menu0.id == menu1.parentId) {
                             menu1.children = []
-                            angular.forEach(res.results, function (menu2) {
+                            angular.forEach(res.data, function (menu2) {
                                 if (menu1.id == menu2.parentId)
                                     menu1.children.push(menu2)
                             })
@@ -102,6 +106,8 @@ angular.module('tk',[
                     $scope.menus.push(menu0)
                 }
             })
+
+            console.log($scope.menus)
         },
         function () {
 
