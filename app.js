@@ -1,14 +1,61 @@
 'use strict'
 
+var tk = {
+    token: '12345678'
+}
+
+
 angular.module('tk',[
     'ui.router',
+    'tk.config',
+    'tk.utils.crypto',
     'tk.global',
     'tk.system.user',
     'tk.system.role'
 ])
 
-.config(['$stateProvider','$urlRouterProvider',function ($stateProvider,$urlRouterProvider) {
+.factory('HttpInterceptor',['tkCrypto','_appConfig',function (tkCrypto,appConfig) {
+    return {
+        request: function (config) {
+            config.headers[appConfig.header.signature] = tkCrypto.sign()
+            config.headers[appConfig.header.token] = tk.token
 
+            config.params._r = Math.random()
+
+            if (!_.isNull(config.params)) {
+                _.chain(config.url.replace('://', '').replace(/\?/g, /\//).split('/'))
+                    .filter(function (val) {
+                        return val.indexOf(':') == 0
+                    })
+                    .each(function (val) {
+                        val = val.replace(':', '')
+                        if (_.has(config.params, val)) {
+                            config.url = config.url.replace(new RegExp(':' + val, 'g'), tkCrypto.encrypt(config.params[val]))
+                            config.params = _.omit(config.params, val)
+                        } else {
+                            config.url = config.url.replace(new RegExp(':' + val, 'g'), tkCrypto.encrypt(''))
+                        }
+                    })
+            }
+
+            if (!_.isNull(config.data)) {
+                config.data = tkCrypto.encrypt(JSON.stringify(config.data))
+            }
+            return config
+        },
+        response: function (config) {
+            if (!_.has(config.headers(), appConfig.header.unEncrypt.toLowerCase())) {
+                config.data = JSON.parse(tkCrypto.decrypt(config.data))
+            }
+            return config
+        }
+
+    }
+}])
+
+.config(['$httpProvider','$stateProvider','$urlRouterProvider',function ($httpProvider,$stateProvider,$urlRouterProvider) {
+
+    $httpProvider.interceptors.push('HttpInterceptor')
 
     $urlRouterProvider.otherwise('/home')
 
@@ -45,7 +92,7 @@ angular.module('tk',[
 
 }])
 
-.controller('mainCtrl',['$scope','$rootScope','$state','tkGlobal',function ($scope,$rootScope,$state,tkGlobal) {
+.controller('mainCtrl',['$scope','$rootScope','$state','$http',function ($scope,$rootScope,$state,$http) {
 
     $scope.$on('$stateNotFound',
         function (event, unfoundState, fromState, fromParams) {
@@ -67,51 +114,15 @@ angular.module('tk',[
         }
     )
 
-
-    $scope.menus = []
-    $scope.currentOpen = null
-
-    $scope.openSubMenu = function (menu) {
-        if (angular.isArray(menu.children) && menu.children.length > 0 && menu.parentId != null) {
-            if ($scope.currentOpen && $scope.currentOpen.id == menu.id)
-                $scope.currentOpen = null
-            else
-                $scope.currentOpen = menu
-        }
-
-    }
-
-    //"15f9a987-73db-11e6-b1cd-74867a69dbf7"
-    tkGlobal.resource.read(
-        tkGlobal.api.menu_query+'/:id',
+    $http.get(
+        '/api/menu/:id',
         {
-            id: '15f9a987-73db-11e6-b1cd-74867a69dbf7'
-        },
-        function (res) {
-            console.log(res)
-            $scope.menus = []
-            angular.forEach(res.data, function (menu0) {
-                if (menu0.parentId == null) {
-                    menu0.children = []
-                    angular.forEach(res.data, function (menu1) {
-                        if (menu0.id == menu1.parentId) {
-                            menu1.children = []
-                            angular.forEach(res.data, function (menu2) {
-                                if (menu1.id == menu2.parentId)
-                                    menu1.children.push(menu2)
-                            })
-                            menu0.children.push(menu1)
-                        }
-                    })
-                    $scope.menus.push(menu0)
-                }
-            })
-
-            console.log($scope.menus)
-        },
-        function () {
-
+            params: {
+                id: '15f74fbe-73db-11e6-b1cd-74867a69dbf7'
+            }
         }
-    )
+    ).success(function (res) {
+        console.log(res)
+    })
 
 }])

@@ -164,31 +164,13 @@ angular.module('tk.global',[
                 )
             },
             read: function (url, params, success, fail) {
-                params = crypto.encryptParams(params)
-
-                var temp = url.split('/')
-                angular.forEach(temp,function (value,index) {
-                    angular.forEach(params, function (v, name) {
-                        if (value == ':' + name)
-                            temp[index] = v
-                    })
-                })
-
-                url = temp.join('/')
                 $http({
                     url: url,
                     method: 'GET',
-                    params: params,
-                    headers: {
-                        'TK-Signature': crypto.sign(),
-                        'TK-Token': '12345678'
-                    }
+                    params: params
                 }).then(
                     function (res) {
-                        if (res.headers('TK-Encrypted') == 'no')
-                            success(res.data)
-                        else
-                            success(crypto.decryptObject(res.data))
+                        success(res)
                     },
                     function (res) {
                         fail()
