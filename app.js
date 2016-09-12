@@ -1,28 +1,46 @@
 'use strict'
 
-var tk = {
-    token: '12345678'
+var runtime = {
+    //可放在cookie里
+    token: ''
 }
-
 
 angular.module('tk',[
     'ui.router',
     'tk.config',
     'tk.utils.crypto',
-    'tk.global',
-    'tk.system.user',
-    'tk.system.role'
+    'tk.index.login',
+    'tk.index.index',
+    'tk.home'
 ])
 
+/**
+ * http拦截处理API请求
+ * 主要用于请求参数的加密和响应内容的解密以及URL自动格式化
+ */
 .factory('HttpInterceptor',['tkCrypto','_appConfig',function (tkCrypto,appConfig) {
     return {
+
+        /**
+         * http请求拦截处理
+         * @param config
+         * @returns {*}
+         */
         request: function (config) {
-            config.headers[appConfig.header.signature] = tkCrypto.sign()
-            config.headers[appConfig.header.token] = tk.token
+            if(config.url.indexOf('/api/') == 0) {
+                //用于鉴权的头部签名和会话
+                config.headers[appConfig.header.signature] = tkCrypto.sign()
+                config.headers[appConfig.header.token] = runtime.token
 
-            config.params._r = Math.random()
+                //get参数加密
+                config.params = config.params || {}
+                _.mapObject(config.params, function (val, key) {
+                    //return val = tkCrypto.encrypt(val)
+                    config.params[key] = tkCrypto.encrypt(val)
+                })
 
-            if (!_.isNull(config.params)) {
+                //重写请求的URL
+                //自动填充URL上的:name占位符
                 _.chain(config.url.replace('://', '').replace(/\?/g, /\//).split('/'))
                     .filter(function (val) {
                         return val.indexOf(':') == 0
@@ -30,24 +48,39 @@ angular.module('tk',[
                     .each(function (val) {
                         val = val.replace(':', '')
                         if (_.has(config.params, val)) {
-                            config.url = config.url.replace(new RegExp(':' + val, 'g'), tkCrypto.encrypt(config.params[val]))
+                            config.url = config.url.replace(new RegExp(':' + val, 'g'), config.params[val])
                             config.params = _.omit(config.params, val)
                         } else {
                             config.url = config.url.replace(new RegExp(':' + val, 'g'), tkCrypto.encrypt(''))
                         }
                     })
+
+                //URL随机数
+                config.params._r = Math.random()
+
+                //post参数加密
+                if (!_.isNull(config.data) && !_.isUndefined(config.data)) {
+                    config.data = tkCrypto.encrypt(JSON.stringify(config.data))
+                }
             }
 
-            if (!_.isNull(config.data)) {
-                config.data = tkCrypto.encrypt(JSON.stringify(config.data))
-            }
             return config
         },
-        response: function (config) {
-            if (!_.has(config.headers(), appConfig.header.unEncrypt.toLowerCase())) {
-                config.data = JSON.parse(tkCrypto.decrypt(config.data))
+
+        /**
+         * http响应拦截处理
+         * @param config
+         * @returns {*}
+         */
+        response: function (response) {
+            if(response.config.url.indexOf('/api/') == 0) {
+                //除非响应包含指定的头(TK-Encrypted)，否则视为密文进行解密
+                if (!_.has(response.headers(), appConfig.header.unEncrypt.toLowerCase())) {
+                    response.data = JSON.parse(tkCrypto.decrypt(response.data))
+                }
             }
-            return config
+
+            return response
         }
 
     }
@@ -55,74 +88,27 @@ angular.module('tk',[
 
 .config(['$httpProvider','$stateProvider','$urlRouterProvider',function ($httpProvider,$stateProvider,$urlRouterProvider) {
 
+    //httpProvider注入拦截
     $httpProvider.interceptors.push('HttpInterceptor')
 
-    $urlRouterProvider.otherwise('/home')
-
-    $stateProvider
-        .state('home', {
-            url: '/home',
-            template: '<div>index</div>',
-            controller: function () {
-            }
-        })
-        .state('system', {
-            abstract: true,
-            template: '<div ui-view></div>'
-        })
-        .state('system.user', {
-            url: '/system/user',
-            templateUrl: 'modules/system/view/user.html',
-            controller: 'systemUserCtrl'
-        })
-        .state('system.role', {
-            url: '/system/role',
-            templateUrl: 'modules/system/view/role.html',
-            controller: 'systemRoleCtrl'
-        })
-        .state('404', {
-            url: '/404',
-            template: '访问的页面不存在'
-        })
-        .state('403', {
-            url: '/403',
-            template: '没有权限'
-        })
+    $urlRouterProvider.otherwise('/login')
 
 
-}])
-
-.controller('mainCtrl',['$scope','$rootScope','$state','$http',function ($scope,$rootScope,$state,$http) {
-
-    $scope.$on('$stateNotFound',
-        function (event, unfoundState, fromState, fromParams) {
-            event.preventDefault()
-            //console.log(unfoundState)
-            $state.go('404')
-        }
-    )
-
-    $scope.$on('$stateChangeStart',
-        function (event, toState, toParams, fromState, fromParams) {
-            //console.log(fromState)
-            //console.log(fromParams)
-            // if(toState.name == 'system.user') {
-            //     event.preventDefault()
-            //     $state.go('403', {test: 1})
-            // }
-
-        }
-    )
-
-    $http.get(
-        '/api/menu/:id',
-        {
-            params: {
-                id: '15f74fbe-73db-11e6-b1cd-74867a69dbf7'
-            }
-        }
-    ).success(function (res) {
-        console.log(res)
+    $stateProvider.state('login', {
+        url: '/login',
+        templateUrl: '/modules/index/view/login.html',
+        controller: 'loginCtrl'
+    }).state('index', {
+        abstract: true,
+        templateUrl: '/modules/index/view/index.html',
+        controller: 'indexCtrl'
+    }).state('index.home', {
+        url: '/home',
+        templateUrl: '/modules/home/view/index.html',
+        controller:'homeCtrl'
+    }).state('404', {
+        url: '/404',
+        template: '访问的页面不存在'
     })
 
 }])

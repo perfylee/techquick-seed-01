@@ -1,0 +1,10 @@
+<div>
+    用户名：<input ng-model="user.uid">
+    <br/>
+    密码:<input type="password" ng-model="user.pwd">
+    <br/>
+    <button ng-click="login()">登录</button>
+
+    <br/>
+    <span style="color:red;" ng-view="error!=''">{{error}}</span>
+</div>

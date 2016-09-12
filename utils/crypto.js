@@ -1,5 +1,5 @@
 (function() {
-    'use strict';
+    'use strict'
 
     angular
         .module('tk.utils.crypto',['tk.config'])
@@ -54,8 +54,6 @@
                 }
 
                 obj.signature = this.md5(this.encrypt(obj.timestamp + '|' + obj.appId + '|' + appConfig.key))
-
-                console.log(obj)
 
                 return btoa(JSON.stringify(obj))
             }

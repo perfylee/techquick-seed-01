@@ -17,7 +17,7 @@
         })
         .constant('_apiConfig', {
             release: {
-                apiBase: 'http://localhost:8088/api/',
+                apiBase: '/api/',
                 api: {
                     user_login: 'user/login',
                     menu_user: 'menu/user'
